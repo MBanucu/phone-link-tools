@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Drives DokeOS System Manager's autostart list. It reads the screen, so it
+     needs the accessibility service; it exists because the autostart list is
+     behind a signature permission and a reinstall silently invalidates an
+     entry while the row still reads on. -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.phonelink.autotoggle"
+    android:versionCode="1"
+    android:versionName="0.1.0">
+
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="35" />
+
+    <application
+        android:label="Auto Toggle"
+        android:allowBackup="false">
+
+        <service
+            android:name="org.phonelink.autotoggle.ToggleService"
+            android:exported="true"
+            android:label="Auto Toggle"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility" />
+        </service>
+
+        <receiver
+            android:name="org.phonelink.autotoggle.Command"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.phonelink.autotoggle.TOGGLE" />
+                <action android:name="org.phonelink.autotoggle.LIST" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
